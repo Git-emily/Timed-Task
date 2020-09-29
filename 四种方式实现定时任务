@@ -1,4 +1,7 @@
-#Reference: https://lz5z.com/Python%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/
+#Reference: 
+https://www.cnblogs.com/zhaoyingjie/p/9664081.htmlhttps://lz5z.com/Python%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/
+https://blog.csdn.net/qq_37634812/article/details/79208782
+https://www.cnblogs.com/zhaoyingjie/p/9664081.html
 
 
 #1. 在py中添加 循环+sleep：执行固定间隔时间的任务，且sleep为阻塞函数
