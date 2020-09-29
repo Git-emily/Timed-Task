@@ -1,0 +1,66 @@
+#Reference: https://lz5z.com/Python%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/
+
+
+#1. 在py中添加 循环+sleep：执行固定间隔时间的任务，且sleep为阻塞函数
+
+while true：
+  function()
+  time.sleep(60) #执行一轮完成后，会停1min
+  
+#2. threading中的Timer: Timer为非阻塞函数 
+---------------
+from datetime import datetime
+from threading import Timer
+# 打印时间函数
+def printTime(inc):
+    print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    t = Timer(inc, printTime, (inc,))   #参数是（时间间隔（单位是秒），要调用的函数名，是调用函数的参数(tuple)）
+    t.start()
+# 5s
+printTime(5)
+---------------
+
+#3. sched模块：是一个调度（延时处理机制），[https://www.pythonf.cn/read/96798]
+-----------------------
+import time,os,sched
+
+root = os.getcwd()
+print('root_path:',root)
+cmd = "D: && cd " + root + r" && D:\CarrierGoTrunk\Deploy\environment\CarrierGoEnv\Scripts\python.exe Time_Interval.py"
+
+task_schedule = sched.scheduler(time.time,time.sleep) #定义调度事件的通用接口.生成调度器
+
+def command(cmd):
+    print('cmd_path',cmd)
+    os.system(cmd)  #执行任务
+    task_schedule.enter(900,0,command,(cmd,))   #1week = 604800
+    print('Mission Completed')
+
+def task(cmd,timing):
+    print('Time_Interval Start')
+    task_schedule.enter(timing,0,command,(cmd,))  #加入调度事件.参数（间隔时间，优先级(用于同时间到达的两个事件同时执行时定序),被调用触发函数，参数(一定要以 tuple 给，如果只有一个参数就(xx,))）
+    task_schedule.run()  #运行调试器，sched模块不是循环的，一次调度enter被执行后就over，再想执行，需再次enter
+
+task(cmd,0)
+-------------------------
+
+# 4. APScheduler定时任务框架
+-----------------------
+import os,time
+from apscheduler.schedulers.blocking import BlockingScheduler
+
+root = os.getcwd()
+print('root_path:', root)
+cmd = "D: && cd " + root + r" && D:\CarrierGoTrunk\Deploy\environment\CarrierGoEnv\Scripts\python.exe Time_Interval.py"
+
+def command(cmd):
+    print('cmd_code:', cmd)
+    os.system(cmd)  # 执行任务
+    print('Mission Completed')
+
+command(cmd) #run the job immediately here, then scheduler
+sched = BlockingScheduler()
+#sched.add_job(command,'interval',mintues=10,args=[cmd])
+sched.add_job(command,'cron',day_of_week = 'mon',hour = 1,args= [cmd] )
+sched.start()
+
